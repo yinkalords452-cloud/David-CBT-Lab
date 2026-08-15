@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration - David CBT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            background: linear-gradient(135deg, #071952, #088395);
+        }
+
+        .box {
+            width: 100%;
+            max-width: 430px;
+
+            background: white;
+            padding: 30px;
+
+            border-radius: 18px;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            width: 65px;
+            height: 65px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: #088395;
+            color: white;
+
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #071952;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 6px;
+
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+
+            border: 1px solid #ccc;
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #088395;
+        }
+
+        button {
+            width: 100%;
+
+            margin-top: 25px;
+            padding: 14px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #088395;
+            color: white;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+
+            border-radius: 8px;
+
+            text-align: center;
+            font-size: 14px;
+
+            display: none;
+        }
+
+        .error {
+            display: block;
+            background: #ffe5e5;
+            color: #b00020;
+        }
+
+        .success {
+            display: block;
+            background: #e5ffe9;
+            color: #08752b;
+        }
+
+        .login {
+            display: block;
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #071952;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <div class="logo">D</div>
+
+    <h1>Student Registration</h1>
+
+    <p class="subtitle">
+        Create your David CBT student account
+    </p>
+
+    <form id="registerForm">
+
+        <label for="fullName">
+            Full Name
+        </label>
+
+        <input
+            id="fullName"
+            type="text"
+            placeholder="Enter your full name"
+            required
+        >
+
+        <label for="username">
+            Username
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            placeholder="Choose a username"
+            required
+        >
+
+        <label for="email">
+            Email
+        </label>
+
+        <input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            required
+        >
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Create a password"
+            minlength="6"
+            required
+        >
+
+        <label for="confirmPassword">
+            Confirm Password
+        </label>
+
+        <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Enter password again"
+            minlength="6"
+            required
+        >
+
+        <button id="registerButton" type="submit">
+            📝 Create Student Account
+        </button>
+
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <a href="student-login.html" class="login">
+        Already have an account? Login
+    </a>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+const form = document.getElementById("registerForm");
+
+const message = document.getElementById("message");
+
+const registerButton =
+    document.getElementById("registerButton");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className = "message " + type;
+}
+
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const fullName =
+        document.getElementById("fullName").value.trim();
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+
+    if (password !== confirmPassword) {
+
+        showMessage(
+            "Passwords do not match.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    registerButton.disabled = true;
+
+    registerButton.textContent =
+        "Creating account...";
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: password,
+
+                options: {
+
+                    data: {
+                        username: username,
+                        full_name: fullName
+                    }
+
+                }
+
+            });
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data.user) {
+            throw new Error(
+                "Account could not be created."
+            );
+        }
+
+
+        const { error: profileError } =
+            await supabaseClient
+                .from("profiles")
+                .insert({
+
+                    id: data.user.id,
+
+                    username: username,
+
+                    full_name: fullName,
+
+                    role: "student"
+
+                });
+
+
+        if (profileError) {
+            throw profileError;
+        }
+
+
+        showMessage(
+            "Registration successful! You can now log in.",
+            "success"
+        );
+
+
+        form.reset();
+
+        registerButton.disabled = false;
+
+        registerButton.textContent =
+            "📝 Create Student Account";
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message ||
+            "Registration failed. Please try again.",
+            "error"
+        );
+
+        registerButton.disabled = false;
+
+        registerButton.textContent =
+            "📝 Create Student Account";
+    }
+
+});
+
+</script>
+
+</body>
+
+          </html>
