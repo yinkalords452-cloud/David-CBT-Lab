@@ -17,33 +17,26 @@
         }
 
         body {
-
             margin: 0;
-
             font-family: Arial, sans-serif;
 
             min-height: 100vh;
 
             display: flex;
-
             justify-content: center;
-
             align-items: center;
 
             padding: 20px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #071952,
-                    #000000
-                );
+            background: linear-gradient(
+                135deg,
+                #071952,
+                #000000
+            );
         }
 
         .login-box {
-
             width: 100%;
-
             max-width: 420px;
 
             background: white;
@@ -58,9 +51,7 @@
         }
 
         .logo {
-
             width: 70px;
-
             height: 70px;
 
             background: #071952;
@@ -72,49 +63,36 @@
             margin: 0 auto 15px;
 
             display: flex;
-
             justify-content: center;
-
             align-items: center;
 
             font-size: 30px;
-
             font-weight: bold;
         }
 
         h1 {
-
             text-align: center;
-
             color: #071952;
-
             margin-bottom: 5px;
         }
 
         .subtitle {
-
             text-align: center;
-
             color: #777;
-
             margin-bottom: 25px;
         }
 
         label {
-
             display: block;
 
             margin-top: 15px;
-
             margin-bottom: 7px;
 
             font-weight: bold;
-
             color: #333;
         }
 
         input {
-
             width: 100%;
 
             padding: 14px;
@@ -129,12 +107,10 @@
         }
 
         input:focus {
-
             border-color: #071952;
         }
 
         button {
-
             width: 100%;
 
             padding: 15px;
@@ -156,13 +132,41 @@
             cursor: pointer;
         }
 
-        button:hover {
+        button:disabled {
+            opacity: 0.6;
+        }
 
-            background: #050f35;
+        .message {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+        .error {
+            display: block;
+
+            background: #ffe5e5;
+
+            color: #b00020;
+        }
+
+        .success {
+            display: block;
+
+            background: #e5ffe9;
+
+            color: #08752b;
         }
 
         .back {
-
             display: block;
 
             text-align: center;
@@ -174,28 +178,13 @@
             text-decoration: none;
         }
 
-        .warning {
-
-            margin-top: 20px;
-
-            padding: 12px;
-
-            background: #fff3cd;
-
-            color: #664d03;
-
-            border-radius: 8px;
-
-            font-size: 13px;
-
-            text-align: center;
-        }
-
     </style>
 
 </head>
 
+
 <body>
+
 
 <div class="login-box">
 
@@ -211,46 +200,190 @@
         David CBT Administration
     </p>
 
-    <form>
 
-        <label>
-            Admin Username
+    <form id="adminLoginForm">
+
+        <label for="email">
+            Admin Email
         </label>
 
         <input
-            type="text"
-            placeholder="Enter admin username"
+            id="email"
+            type="email"
+            placeholder="Enter admin email"
             required
         >
 
-        <label>
-            Admin Password
+
+        <label for="password">
+            Password
         </label>
 
         <input
+            id="password"
             type="password"
-            placeholder="Enter admin password"
+            placeholder="Enter your password"
             required
         >
 
-        <button type="submit">
+
+        <button
+            id="loginButton"
+            type="submit">
+
             🔐 Admin Login
+
         </button>
 
     </form>
 
-    <div class="warning">
-        ⚠️ Administrator access only
+
+    <div
+        id="message"
+        class="message">
     </div>
 
-    <a href="index.html"
-       class="back">
+
+    <a
+        href="index.html"
+        class="back">
 
         ← Back to Home
 
     </a>
 
 </div>
+
+
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+const form =
+    document.getElementById("adminLoginForm");
+
+const message =
+    document.getElementById("message");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+}
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+            "Checking...";
+
+        message.className =
+            "message";
+
+
+        try {
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            const user =
+                data.user;
+
+
+            const { data: profile, error: profileError } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("username, role")
+                    .eq("id", user.id)
+                    .single();
+
+
+            if (profileError) {
+
+                await supabaseClient.auth.signOut();
+
+                throw new Error(
+                    "Your account profile could not be found."
+                );
+            }
+
+
+            if (profile.role !== "admin") {
+
+                await supabaseClient.auth.signOut();
+
+                throw new Error(
+                    "Access denied. This account is not an administrator."
+                );
+            }
+
+
+            showMessage(
+                "Login successful! Opening Admin Dashboard...",
+                "success"
+            );
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "admin-dashboard.html";
+
+            }, 1000);
+
+
+        } catch (error) {
+
+            showMessage(
+                error.message ||
+                "Login failed. Please check your details.",
+                "error"
+            );
+
+            loginButton.disabled = false;
+
+            loginButton.textContent =
+                "🔐 Admin Login";
+        }
+
+    }
+);
+
+</script>
+
 
 </body>
 
