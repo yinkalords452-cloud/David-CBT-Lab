@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - David CBT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #071952;
+            color: white;
+            padding: 18px;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #d62828;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 25px 18px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .welcome h1 {
+            margin: 0 0 8px;
+            color: #071952;
+        }
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(210px, 1fr)
+                );
+
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 15px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .icon {
+            font-size: 35px;
+        }
+
+        .card h2 {
+            color: #071952;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .card button {
+            width: 100%;
+            padding: 12px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #088395;
+            color: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            opacity: 0.85;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+
+            background: white;
+            border-radius: 10px;
+
+            text-align: center;
+            color: #555;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="header-content">
+
+        <div class="brand">
+            🎓 DAVID CBT ADMIN
+        </div>
+
+        <button
+            id="logoutButton"
+            class="logout">
+
+            🚪 Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="welcome">
+
+        <h1 id="welcomeName">
+            Checking account...
+        </h1>
+
+        <p>
+            Welcome to your David CBT
+            administration dashboard.
+        </p>
+
+    </section>
+
+
+    <section class="cards">
+
+
+        <div class="card">
+
+            <div class="icon">📝</div>
+
+            <h2>
+                Questions
+            </h2>
+
+            <p>
+                Add, edit and delete examination
+                questions.
+            </p>
+
+            <button>
+                Manage Questions
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">👨‍🎓</div>
+
+            <h2>
+                Students
+            </h2>
+
+            <p>
+                Manage registered students.
+            </p>
+
+            <button>
+                Manage Students
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">📊</div>
+
+            <h2>
+                Results
+            </h2>
+
+            <p>
+                View student examination
+                scores and results.
+            </p>
+
+            <button>
+                View Results
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">📚</div>
+
+            <h2>
+                Subjects
+            </h2>
+
+            <p>
+                Manage the subjects available
+                for examinations.
+            </p>
+
+            <button>
+                Manage Subjects
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+    <div
+        id="status"
+        class="status">
+
+        🔐 Checking administrator access...
+
+    </div>
+
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+async function checkAdmin() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "admin-login.html";
+
+        return;
+    }
+
+
+    const user =
+        session.user;
+
+
+    const {
+        data: profile,
+        error
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select(
+            "username, full_name, role"
+        )
+
+        .eq("id", user.id)
+
+        .single();
+
+
+    if (error || !profile) {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "admin-login.html";
+
+        return;
+    }
+
+
+    if (profile.role !== "admin") {
+
+        await supabaseClient.auth.signOut();
+
+        alert(
+            "Access denied. Admin account required."
+        );
+
+        window.location.href =
+            "student-dashboard.html";
+
+        return;
+    }
+
+
+    const name =
+        profile.full_name ||
+        profile.username ||
+        "Admin";
+
+
+    document.getElementById(
+        "welcomeName"
+    ).textContent =
+        "Welcome, " + name + " 👋";
+
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        "✅ Administrator access verified.";
+
+}
+
+
+checkAdmin();
+
+
+document.getElementById(
+    "logoutButton"
+).addEventListener(
+    "click",
+    async function() {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "index.html";
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
