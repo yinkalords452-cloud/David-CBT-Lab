@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - David CBT</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #071952,
+                    #000000
+                );
+        }
+
+        .login-box {
+
+            width: 100%;
+
+            max-width: 420px;
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,0.4);
+        }
+
+        .logo {
+
+            width: 70px;
+
+            height: 70px;
+
+            background: #071952;
+
+            color: white;
+
+            border-radius: 50%;
+
+            margin: 0 auto 15px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 30px;
+
+            font-weight: bold;
+        }
+
+        h1 {
+
+            text-align: center;
+
+            color: #071952;
+
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #777;
+
+            margin-bottom: 25px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-top: 15px;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+
+            color: #333;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 9px;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        input:focus {
+
+            border-color: #071952;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 15px;
+
+            margin-top: 25px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #071952;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+
+            background: #050f35;
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #071952;
+
+            text-decoration: none;
+        }
+
+        .warning {
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            background: #fff3cd;
+
+            color: #664d03;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">
+        A
+    </div>
+
+    <h1>
+        Admin Login
+    </h1>
+
+    <p class="subtitle">
+        David CBT Administration
+    </p>
+
+    <form>
+
+        <label>
+            Admin Username
+        </label>
+
+        <input
+            type="text"
+            placeholder="Enter admin username"
+            required
+        >
+
+        <label>
+            Admin Password
+        </label>
+
+        <input
+            type="password"
+            placeholder="Enter admin password"
+            required
+        >
+
+        <button type="submit">
+            🔐 Admin Login
+        </button>
+
+    </form>
+
+    <div class="warning">
+        ⚠️ Administrator access only
+    </div>
+
+    <a href="index.html"
+       class="back">
+
+        ← Back to Home
+
+    </a>
+
+</div>
+
+</body>
+
+</html>
