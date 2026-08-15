@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard - David CBT</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #222;
+        }
+
+
+        header {
+
+            background: #071952;
+
+            color: white;
+
+            padding: 18px;
+        }
+
+
+        .header-content {
+
+            max-width: 1000px;
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .brand {
+
+            font-size: 21px;
+
+            font-weight: bold;
+        }
+
+
+        .logout {
+
+            background: #d62828;
+
+            color: white;
+
+            border: none;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+
+        main {
+
+            max-width: 1000px;
+
+            margin: auto;
+
+            padding: 25px 18px;
+        }
+
+
+        .welcome {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+
+        .welcome h1 {
+
+            margin: 0 0 8px;
+
+            color: #071952;
+        }
+
+
+        .subjects {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(210px, 1fr)
+                );
+
+            gap: 18px;
+        }
+
+
+        .subject {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+
+        .subject-icon {
+
+            font-size: 35px;
+        }
+
+
+        .subject h2 {
+
+            color: #071952;
+
+            margin-bottom: 8px;
+        }
+
+
+        .subject p {
+
+            color: #666;
+
+            line-height: 1.5;
+        }
+
+
+        .start {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #088395;
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+
+        .start:hover {
+
+            opacity: 0.85;
+        }
+
+
+        .message {
+
+            text-align: center;
+
+            color: #777;
+
+            padding: 20px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="header-content">
+
+        <div class="brand">
+
+            🎓 DAVID CBT
+
+        </div>
+
+
+        <button
+            id="logoutButton"
+            class="logout">
+
+            🚪 Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <section class="welcome">
+
+        <h1 id="welcomeName">
+
+            Welcome, Student 👋
+
+        </h1>
+
+
+        <p>
+
+            Choose a subject below to begin
+            your examination.
+
+        </p>
+
+    </section>
+
+
+    <h2>
+
+        📚 Available Subjects
+
+    </h2>
+
+
+    <section class="subjects">
+
+
+        <div class="subject">
+
+            <div class="subject-icon">
+                ⚡
+            </div>
+
+            <h2>
+                Physics
+            </h2>
+
+            <p>
+                Test your knowledge of Physics.
+            </p>
+
+            <button class="start">
+                Start Exam
+            </button>
+
+        </div>
+
+
+        <div class="subject">
+
+            <div class="subject-icon">
+                🧪
+            </div>
+
+            <h2>
+                Chemistry
+            </h2>
+
+            <p>
+                Test your knowledge of Chemistry.
+            </p>
+
+            <button class="start">
+                Start Exam
+            </button>
+
+        </div>
+
+
+        <div class="subject">
+
+            <div class="subject-icon">
+                🧬
+            </div>
+
+            <h2>
+                Biology
+            </h2>
+
+            <p>
+                Test your knowledge of Biology.
+            </p>
+
+            <button class="start">
+                Start Exam
+            </button>
+
+        </div>
+
+
+        <div class="subject">
+
+            <div class="subject-icon">
+                📖
+            </div>
+
+            <h2>
+                English
+            </h2>
+
+            <p>
+                Test your English knowledge.
+            </p>
+
+            <button class="start">
+                Start Exam
+            </button>
+
+        </div>
+
+
+        <div class="subject">
+
+            <div class="subject-icon">
+                💰
+            </div>
+
+            <h2>
+                Economics
+            </h2>
+
+            <p>
+                Test your Economics knowledge.
+            </p>
+
+            <button class="start">
+                Start Exam
+            </button>
+
+        </div>
+
+
+        <div class="subject">
+
+            <div class="subject-icon">
+                🌱
+            </div>
+
+            <h2>
+                Agricultural Science
+            </h2>
+
+            <p>
+                Test your Agricultural Science knowledge.
+            </p>
+
+            <button class="start">
+                Start Exam
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+async function loadStudent() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "student-login.html";
+
+        return;
+    }
+
+
+    const user =
+        session.user;
+
+
+    const {
+        data: profile
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("full_name, username, role")
+
+        .eq("id", user.id)
+
+        .single();
+
+
+    if (!profile ||
+        profile.role !== "student") {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "student-login.html";
+
+        return;
+    }
+
+
+    const name =
+        profile.full_name ||
+        profile.username ||
+        "Student";
+
+
+    document.getElementById(
+        "welcomeName"
+    ).textContent =
+        "Welcome, " + name + " 👋";
+}
+
+
+loadStudent();
+
+
+document.getElementById(
+    "logoutButton"
+).addEventListener(
+    "click",
+    async function() {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "index.html";
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
