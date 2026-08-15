@@ -2,8 +2,11 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>David CBT</title>
 
@@ -14,13 +17,17 @@
         }
 
         body {
+
             margin: 0;
+
             font-family: Arial, sans-serif;
 
             min-height: 100vh;
 
             display: flex;
+
             justify-content: center;
+
             align-items: center;
 
             padding: 20px;
@@ -33,7 +40,9 @@
         }
 
         .container {
+
             width: 100%;
+
             max-width: 450px;
 
             background: white;
@@ -46,14 +55,17 @@
 
             box-shadow:
                 0 10px 30px
-                rgba(0, 0, 0, 0.3);
+                rgba(0,0,0,0.3);
         }
 
         .logo {
+
             width: 80px;
+
             height: 80px;
 
             background: #071952;
+
             color: white;
 
             border-radius: 50%;
@@ -61,24 +73,32 @@
             margin: auto;
 
             display: flex;
+
             justify-content: center;
+
             align-items: center;
 
             font-size: 32px;
+
             font-weight: bold;
         }
 
         h1 {
+
             color: #071952;
+
             margin-bottom: 5px;
         }
 
         .subtitle {
+
             color: #666;
+
             margin-bottom: 30px;
         }
 
         .button {
+
             display: block;
 
             width: 100%;
@@ -99,18 +119,27 @@
         }
 
         .student {
+
             background: #088395;
         }
 
+        .register {
+
+            background: #f39c12;
+        }
+
         .admin {
+
             background: #071952;
         }
 
         .button:hover {
+
             opacity: 0.85;
         }
 
         .footer {
+
             margin-top: 25px;
 
             color: #777;
@@ -125,43 +154,65 @@
 
 <body>
 
-    <div class="container">
 
-        <div class="logo">
-            D
-        </div>
-
-        <h1>
-            DAVID CBT
-        </h1>
-
-        <p class="subtitle">
-            Online Examination System
-        </p>
+<div class="container">
 
 
-        <a href="student-login.html"
-           class="button student">
-
-            👨‍🎓 Student Login
-
-        </a>
-
-
-        <a href="admin-login.html"
-           class="button admin">
-
-            👨‍💼 Admin Login
-
-        </a>
-
-
-        <p class="footer">
-            Secure • Simple • Online Examination
-        </p>
-
+    <div class="logo">
+        D
     </div>
+
+
+    <h1>
+        DAVID CBT
+    </h1>
+
+
+    <p class="subtitle">
+        Online Examination System
+    </p>
+
+
+    <!-- STUDENT LOGIN -->
+
+    <a href="student-login.html"
+       class="button student">
+
+        👨‍🎓 Student Login
+
+    </a>
+
+
+    <!-- NEW STUDENT REGISTRATION -->
+
+    <a href="student-register.html"
+       class="button register">
+
+        📝 New Student Registration
+
+    </a>
+
+
+    <!-- ADMIN LOGIN -->
+
+    <a href="admin-login.html"
+       class="button admin">
+
+        👨‍💼 Admin Login
+
+    </a>
+
+
+    <p class="footer">
+
+        Secure • Simple • Online Examination
+
+    </p>
+
+
+</div>
+
 
 </body>
 
-</html>
+    </html>
