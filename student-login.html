@@ -2,259 +2,329 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Student Login - David CBT</title>
 
-
     <style>
-
         * {
             box-sizing: border-box;
         }
 
-
         body {
-
             margin: 0;
-
             font-family: Arial, sans-serif;
-
             min-height: 100vh;
 
             display: flex;
-
             justify-content: center;
-
             align-items: center;
 
             padding: 20px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #071952,
-                    #088395
-                );
+            background: linear-gradient(135deg, #071952, #088395);
         }
 
-
-        .login-box {
-
+        .box {
             width: 100%;
-
             max-width: 420px;
 
             background: white;
-
             padding: 30px;
 
             border-radius: 18px;
 
-            box-shadow:
-                0 10px 30px
-                rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-
         .logo {
+            width: 70px;
+            height: 70px;
 
-            width: 65px;
-
-            height: 65px;
-
-            background: #088395;
-
-            color: white;
+            margin: auto;
 
             border-radius: 50%;
 
-            margin: 0 auto 15px;
+            background: #071952;
+            color: white;
 
             display: flex;
-
             justify-content: center;
-
             align-items: center;
 
-            font-size: 28px;
-
+            font-size: 30px;
             font-weight: bold;
         }
 
-
         h1 {
-
             text-align: center;
-
             color: #071952;
-
             margin-bottom: 5px;
         }
 
-
         .subtitle {
-
             text-align: center;
-
             color: #777;
-
             margin-bottom: 25px;
         }
 
-
         label {
-
             display: block;
 
             margin-top: 15px;
-
             margin-bottom: 7px;
 
             font-weight: bold;
-
-            color: #333;
         }
 
-
         input {
-
             width: 100%;
-
             padding: 14px;
 
             border: 1px solid #ccc;
-
             border-radius: 9px;
 
             font-size: 16px;
-
-            outline: none;
         }
 
-
         input:focus {
-
+            outline: none;
             border-color: #088395;
         }
 
-
         button {
-
             width: 100%;
 
             padding: 15px;
-
             margin-top: 25px;
 
             border: none;
-
             border-radius: 9px;
 
             background: #088395;
-
             color: white;
 
             font-size: 17px;
-
             font-weight: bold;
-
-            cursor: pointer;
         }
 
-
-        button:hover {
-
-            background: #066b78;
+        button:disabled {
+            opacity: 0.6;
         }
 
+        .message {
+            display: none;
 
-        .back {
+            margin-top: 15px;
+            padding: 12px;
 
-            display: block;
+            border-radius: 8px;
 
             text-align: center;
-
-            margin-top: 20px;
-
-            color: #071952;
-
-            text-decoration: none;
         }
 
+        .error {
+            display: block;
+
+            background: #ffe5e5;
+            color: #b00020;
+        }
+
+        .success {
+            display: block;
+
+            background: #e5ffe9;
+            color: #08752b;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            display: block;
+
+            margin-top: 10px;
+
+            color: #071952;
+            text-decoration: none;
+        }
     </style>
 
 </head>
 
-
 <body>
 
-
-<div class="login-box">
-
+<div class="box">
 
     <div class="logo">
         D
     </div>
 
-
     <h1>
         Student Login
     </h1>
 
-
     <p class="subtitle">
-        Login to take your examination
+        Login to David CBT
     </p>
 
 
-    <form>
+    <form id="loginForm">
 
-        <label>
-            Username
+        <label for="email">
+            Email
         </label>
 
         <input
-            type="text"
-            placeholder="Enter your username"
+            id="email"
+            type="email"
+            placeholder="Enter your email"
             required
         >
 
 
-        <label>
+        <label for="password">
             Password
         </label>
 
         <input
+            id="password"
             type="password"
             placeholder="Enter your password"
             required
         >
 
 
-        <button type="submit">
+        <button
+            id="loginButton"
+            type="submit">
 
-            🔐 Login
+            🔐 Student Login
 
         </button>
 
     </form>
 
 
-    <a href="index.html"
-       class="back">
+    <div
+        id="message"
+        class="message">
+    </div>
 
-        ← Back to Home
 
-    </a>
+    <div class="links">
 
+        <a href="student-register.html">
+            📝 Create New Student Account
+        </a>
+
+        <a href="index.html">
+            ← Back to Home
+        </a>
+
+    </div>
 
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+const form =
+    document.getElementById("loginForm");
+
+const message =
+    document.getElementById("message");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+}
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+            "Checking...";
+
+
+        try {
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: email,
+
+                    password: password
+
+                });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            showMessage(
+                "Login successful! Opening your dashboard...",
+                "success"
+            );
+
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "student-dashboard.html";
+
+            }, 800);
+
+
+        } catch (error) {
+
+            showMessage(
+                error.message ||
+                "Login failed. Check your email and password.",
+                "error"
+            );
+
+            loginButton.disabled = false;
+
+            loginButton.textContent =
+                "🔐 Student Login";
+        }
+
+    }
+);
+
+</script>
 
 </body>
 
