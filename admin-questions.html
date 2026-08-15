@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Questions - David CBT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        header {
+            background: #071952;
+            color: white;
+            padding: 18px;
+        }
+
+        .header {
+            max-width: 1000px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #088395;
+            padding: 9px 13px;
+            border-radius: 7px;
+        }
+
+        main {
+            max-width: 850px;
+            margin: auto;
+            padding: 25px 15px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h1, h2 {
+            color: #071952;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px;
+
+            border: 1px solid #ccc;
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 13px 18px;
+
+            background: #088395;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .save {
+            width: 100%;
+            margin-top: 22px;
+        }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .success {
+            display: block;
+            background: #e5ffe9;
+            color: #08752b;
+        }
+
+        .error {
+            display: block;
+            background: #ffe5e5;
+            color: #b00020;
+        }
+
+        .question {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .question p {
+            line-height: 1.5;
+        }
+
+        .delete {
+            background: #d62828;
+            margin-top: 10px;
+        }
+
+        .empty {
+            color: #777;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="header">
+
+        <div class="brand">
+            📝 DAVID CBT — QUESTIONS
+        </div>
+
+        <a href="admin-dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <div class="box">
+
+        <h1>
+            ➕ Add New Question
+        </h1>
+
+        <form id="questionForm">
+
+
+            <label>
+                Subject
+            </label>
+
+            <select id="subject" required>
+
+                <option value="">
+                    Select Subject
+                </option>
+
+                <option value="Physics">
+                    Physics
+                </option>
+
+                <option value="English">
+                    English
+                </option>
+
+                <option value="Chemistry">
+                    Chemistry
+                </option>
+
+                <option value="Biology">
+                    Biology
+                </option>
+
+                <option value="Economics">
+                    Economics
+                </option>
+
+                <option value="Agricultural Science">
+                    Agricultural Science
+                </option>
+
+            </select>
+
+
+            <label>
+                Question
+            </label>
+
+            <textarea
+                id="question"
+                placeholder="Enter your question..."
+                required></textarea>
+
+
+            <label>
+                Option A
+            </label>
+
+            <input
+                id="optionA"
+                type="text"
+                placeholder="Enter option A"
+                required>
+
+
+            <label>
+                Option B
+            </label>
+
+            <input
+                id="optionB"
+                type="text"
+                placeholder="Enter option B"
+                required>
+
+
+            <label>
+                Option C
+            </label>
+
+            <input
+                id="optionC"
+                type="text"
+                placeholder="Enter option C"
+                required>
+
+
+            <label>
+                Option D
+            </label>
+
+            <input
+                id="optionD"
+                type="text"
+                placeholder="Enter option D"
+                required>
+
+
+            <label>
+                Correct Answer
+            </label>
+
+            <select id="correctAnswer" required>
+
+                <option value="">
+                    Select correct answer
+                </option>
+
+                <option value="A">
+                    A
+                </option>
+
+                <option value="B">
+                    B
+                </option>
+
+                <option value="C">
+                    C
+                </option>
+
+                <option value="D">
+                    D
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="save"
+                id="saveButton">
+
+                💾 Save Question
+
+            </button>
+
+
+        </form>
+
+
+        <div
+            id="message"
+            class="message">
+        </div>
+
+    </div>
+
+
+    <div class="box">
+
+        <h2>
+            📚 Saved Questions
+        </h2>
+
+        <div id="questionsList">
+
+            <p class="empty">
+                Loading questions...
+            </p>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+const form =
+    document.getElementById("questionForm");
+
+const message =
+    document.getElementById("message");
+
+const saveButton =
+    document.getElementById("saveButton");
+
+const questionsList =
+    document.getElementById("questionsList");
+
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+}
+
+
+async function checkAdmin() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "admin-login.html";
+
+        return false;
+    }
+
+
+    const {
+        data: profile,
+        error
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("role")
+
+        .eq("id", session.user.id)
+
+        .single();
+
+
+    if (
+        error ||
+        !profile ||
+        profile.role !== "admin"
+    ) {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "admin-login.html";
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        if (!(await checkAdmin())) {
+            return;
+        }
+
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+            "Saving...";
+
+
+        const questionData = {
+
+            subject:
+                document.getElementById("subject").value,
+
+            question:
+                document.getElementById("question").value.trim(),
+
+            option_a:
+                document.getElementById("optionA").value.trim(),
+
+            option_b:
+                document.getElementById("optionB").value.trim(),
+
+            option_c:
+                document.getElementById("optionC").value.trim(),
+
+            option_d:
+                document.getElementById("optionD").value.trim(),
+
+            correct_answer:
+                document.getElementById("correctAnswer").value
+
+        };
+
+
+        const {
+            error
+        } = await supabaseClient
+
+            .from("questions")
+
+            .insert(questionData);
+
+
+        if (error) {
+
+            showMessage(
+                "Error: " + error.message,
+                "error"
+            );
+
+        } else {
+
+            showMessage(
+                "✅ Question saved successfully!",
+                "success"
+            );
+
+            form.reset();
+
+            loadQuestions();
+        }
+
+
+        saveButton.disabled = false;
+
+        saveButton.textContent =
+            "💾 Save Question";
+
+    }
+);
+
+
+async function loadQuestions() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("questions")
+
+        .select("*")
+
+        .order("id", {
+            ascending: false
+        });
+
+
+    if (error) {
+
+        questionsList.innerHTML =
+            "<p class='empty'>Unable to load questions.</p>";
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        questionsList.innerHTML =
+            "<p class='empty'>No questions added yet.</p>";
+
+        return;
+    }
+
+
+    questionsList.innerHTML = "";
+
+
+    data.forEach(function(q) {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "question";
+
+
+        div.innerHTML = `
+
+            <strong>
+                ${q.subject}
+            </strong>
+
+            <p>
+                ${q.question}
+            </p>
+
+            <p>
+                A. ${q.option_a}<br>
+                B. ${q.option_b}<br>
+                C. ${q.option_c}<br>
+                D. ${q.option_d}
+            </p>
+
+            <strong>
+                Correct Answer: ${q.correct_answer}
+            </strong>
+
+            <br>
+
+            <button
+                class="delete"
+                onclick="deleteQuestion(${q.id})">
+
+                🗑️ Delete
+
+            </button>
+
+        `;
+
+
+        questionsList.appendChild(div);
+
+    });
+
+}
+
+
+async function deleteQuestion(id) {
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this question?"
+        )
+    ) {
+        return;
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+
+        .from("questions")
+
+        .delete()
+
+        .eq("id", id);
+
+
+    if (error) {
+
+        alert(
+            "Could not delete question: " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    loadQuestions();
+
+}
+
+
+checkAdmin().then(function(isAdmin) {
+
+    if (isAdmin) {
+        loadQuestions();
+    }
+
+});
+
+</script>
+
+
+</body>
+
+</html>
