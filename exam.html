@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CBT Examination - David CBT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #071952;
+            color: white;
+            padding: 18px;
+        }
+
+        .header {
+            max-width: 900px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .timer {
+            background: #d62828;
+            padding: 9px 13px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 850px;
+            margin: auto;
+            padding: 25px 15px;
+        }
+
+        .subject-box,
+        .question-box,
+        .result-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .start-button,
+        .next-button,
+        .submit-button {
+            border: none;
+            border-radius: 8px;
+            padding: 13px 20px;
+
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .start-button {
+            background: #088395;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .next-button {
+            background: #088395;
+        }
+
+        .submit-button {
+            background: #d62828;
+        }
+
+        .question-number {
+            color: #088395;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .option {
+            display: block;
+
+            padding: 15px;
+            margin: 12px 0;
+
+            border: 1px solid #ddd;
+            border-radius: 9px;
+
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: #f0f7f8;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .score {
+            font-size: 35px;
+            font-weight: bold;
+            color: #088395;
+            text-align: center;
+        }
+
+        .result-text {
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+
+            color: #071952;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="header">
+
+        <div class="title">
+            🎓 DAVID CBT
+        </div>
+
+        <div
+            id="timer"
+            class="timer">
+
+            30:00
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- SUBJECT SELECTION -->
+
+    <div
+        id="subjectBox"
+        class="subject-box">
+
+        <h2>
+            📚 Choose Your Subject
+        </h2>
+
+        <select id="subject">
+
+            <option value="">
+                Select Subject
+            </option>
+
+            <option value="Physics">
+                Physics
+            </option>
+
+            <option value="English">
+                English
+            </option>
+
+            <option value="Chemistry">
+                Chemistry
+            </option>
+
+            <option value="Biology">
+                Biology
+            </option>
+
+            <option value="Economics">
+                Economics
+            </option>
+
+            <option value="Agricultural Science">
+                Agricultural Science
+            </option>
+
+        </select>
+
+
+        <button
+            id="startButton"
+            class="start-button">
+
+            🚀 Start Examination
+
+        </button>
+
+    </div>
+
+
+    <!-- QUESTION -->
+
+    <div
+        id="questionBox"
+        class="question-box hidden">
+
+
+        <div
+            id="questionNumber"
+            class="question-number">
+
+        </div>
+
+
+        <p
+            id="questionText"
+            class="question-text">
+
+        </p>
+
+
+        <div id="options">
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                id="nextButton"
+                class="next-button">
+
+                Next →
+
+            </button>
+
+
+            <button
+                id="submitButton"
+                class="submit-button hidden">
+
+                Submit Exam
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div
+        id="resultBox"
+        class="result-box hidden">
+
+
+        <h2 style="text-align:center;">
+            🎉 Examination Complete
+        </h2>
+
+
+        <div
+            id="score"
+            class="score">
+
+        </div>
+
+
+        <p
+            id="resultText"
+            class="result-text">
+
+        </p>
+
+
+        <a
+            href="student-dashboard.html"
+            class="back-button">
+
+            ← Back to Dashboard
+
+        </a>
+
+
+    </div>
+
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let answers = {};
+
+let selectedSubject = "";
+
+let timeLeft = 30 * 60;
+
+let timerInterval;
+
+
+const subjectBox =
+    document.getElementById("subjectBox");
+
+const questionBox =
+    document.getElementById("questionBox");
+
+const resultBox =
+    document.getElementById("resultBox");
+
+const questionNumber =
+    document.getElementById("questionNumber");
+
+const questionText =
+    document.getElementById("questionText");
+
+const options =
+    document.getElementById("options");
+
+const timer =
+    document.getElementById("timer");
+
+
+async function checkStudent() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "student-login.html";
+
+        return false;
+    }
+
+
+    const {
+        data: profile
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("role")
+
+        .eq("id", session.user.id)
+
+        .single();
+
+
+    if (!profile ||
+        profile.role !== "student") {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "student-login.html";
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+document.getElementById(
+    "startButton"
+).addEventListener(
+    "click",
+    startExam
+);
+
+
+async function startExam() {
+
+    if (!(await checkStudent())) {
+        return;
+    }
+
+
+    selectedSubject =
+        document.getElementById(
+            "subject"
+        ).value;
+
+
+    if (!selectedSubject) {
+
+        alert(
+            "Please select a subject."
+        );
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("questions")
+
+        .select("*")
+
+        .eq("subject", selectedSubject)
+
+        .order("id", {
+            ascending: true
+        });
+
+
+    if (error) {
+
+        alert(
+            "Could not load questions: " +
+            error.message
+        );
+
+        return;
+    }
+
+
+    if (!data ||
+        data.length === 0) {
+
+        alert(
+            "There are no questions for " +
+            selectedSubject +
+            " yet."
+        );
+
+        return;
+    }
+
+
+    questions = data;
+
+    currentQuestion = 0;
+
+    answers = {};
+
+
+    subjectBox.classList.add(
+        "hidden"
+    );
+
+    questionBox.classList.remove(
+        "hidden"
+    );
+
+
+    startTimer();
+
+    showQuestion();
+
+}
+
+
+function showQuestion() {
+
+    const q =
+        questions[currentQuestion];
+
+
+    questionNumber.textContent =
+        "Question " +
+        (currentQuestion + 1) +
+        " of " +
+        questions.length;
+
+
+    questionText.textContent =
+        q.question;
+
+
+    options.innerHTML = "";
+
+
+    const optionData = [
+
+        ["A", q.option_a],
+
+        ["B", q.option_b],
+
+        ["C", q.option_c],
+
+        ["D", q.option_d]
+
+    ];
+
+
+    optionData.forEach(function(option) {
+
+        const label =
+            document.createElement("label");
+
+        label.className =
+            "option";
+
+
+        const radio =
+            document.createElement("input");
+
+        radio.type = "radio";
+
+        radio.name = "answer";
+
+        radio.value =
+            option[0];
+
+
+        if (
+            answers[currentQuestion] ===
+            option[0]
+        ) {
+
+            radio.checked = true;
+
+        }
+
+
+        radio.addEventListener(
+            "change",
+            function() {
+
+                answers[currentQuestion] =
+                    this.value;
+
+            }
+        );
+
+
+        label.appendChild(radio);
+
+        label.appendChild(
+            document.createTextNode(
+                option[0] +
+                ". " +
+                option[1]
+            )
+        );
+
+
+        options.appendChild(label);
+
+    });
+
+
+    const nextButton =
+        document.getElementById(
+            "nextButton"
+        );
+
+    const submitButton =
+        document.getElementById(
+            "submitButton"
+        );
+
+
+    if (
+        currentQuestion ===
+        questions.length - 1
+    ) {
+
+        nextButton.classList.add(
+            "hidden"
+        );
+
+        submitButton.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        nextButton.classList.remove(
+            "hidden"
+        );
+
+        submitButton.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+document.getElementById(
+    "nextButton"
+).addEventListener(
+    "click",
+    function() {
+
+        if (
+            answers[currentQuestion] ===
+            undefined
+        ) {
+
+            alert(
+                "Please choose an answer first."
+            );
+
+            return;
+        }
+
+
+        currentQuestion++;
+
+        showQuestion();
+
+    }
+);
+
+
+document.getElementById(
+    "submitButton"
+).addEventListener(
+    "click",
+    function() {
+
+        if (
+            answers[currentQuestion] ===
+            undefined
+        ) {
+
+            alert(
+                "Please choose an answer first."
+            );
+
+            return;
+        }
+
+
+        if (
+            confirm(
+                "Are you sure you want to submit?"
+            )
+        ) {
+
+            finishExam();
+
+        }
+
+    }
+);
+
+
+async function finishExam() {
+
+    clearInterval(timerInterval);
+
+
+    let scoreValue = 0;
+
+
+    questions.forEach(
+        function(q, index) {
+
+            if (
+                answers[index] ===
+                q.correct_answer
+            ) {
+
+                scoreValue++;
+
+            }
+
+        }
+    );
+
+
+    const percentage =
+        Math.round(
+            (scoreValue /
+            questions.length) * 100
+        );
+
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (session) {
+
+        await supabaseClient
+
+            .from("results")
+
+            .insert({
+
+                user_id:
+                    session.user.id,
+
+                subject:
+                    selectedSubject,
+
+                score:
+                    scoreValue,
+
+                total_questions:
+                    questions.length
+
+            });
+
+    }
+
+
+    questionBox.classList.add(
+        "hidden"
+    );
+
+    resultBox.classList.remove(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        scoreValue +
+        " / " +
+        questions.length;
+
+
+    document.getElementById(
+        "resultText"
+    ).textContent =
+        "You scored " +
+        percentage +
+        "%. Great job!";
+
+}
+
+
+function startTimer() {
+
+    timerInterval =
+        setInterval(
+            function() {
+
+                timeLeft--;
+
+                const minutes =
+                    Math.floor(
+                        timeLeft / 60
+                    );
+
+                const seconds =
+                    timeLeft % 60;
+
+
+                timer.textContent =
+                    String(minutes)
+                    .padStart(2, "0") +
+                    ":" +
+                    String(seconds)
+                    .padStart(2, "0");
+
+
+                if (timeLeft <= 0) {
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+                    finishExam();
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+checkStudent();
+
+</script>
+
+
+</body>
+
+</html>
