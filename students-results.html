@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Results - David CBT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #071952;
+            color: white;
+            padding: 18px;
+        }
+
+        .header {
+            max-width: 900px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #088395;
+            padding: 9px 13px;
+            border-radius: 7px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: auto;
+            padding: 25px 15px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #071952;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .subject {
+            font-size: 20px;
+            font-weight: bold;
+            color: #071952;
+        }
+
+        .score {
+            font-size: 25px;
+            font-weight: bold;
+            color: #088395;
+            margin-top: 8px;
+        }
+
+        .date {
+            color: #777;
+            margin-top: 8px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 30px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #777;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="header">
+
+        <div class="brand">
+            🎓 DAVID CBT
+        </div>
+
+        <a
+            href="student-dashboard.html"
+            class="back">
+
+            ← Dashboard
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <div class="box">
+
+        <h1>
+            📊 My Examination Results
+        </h1>
+
+        <div id="results">
+
+            <p class="loading">
+                Loading your results...
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+async function loadResults() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "student-login.html";
+
+        return;
+    }
+
+
+    const {
+        data: profile
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("role")
+
+        .eq("id", session.user.id)
+
+        .single();
+
+
+    if (!profile ||
+        profile.role !== "student") {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "student-login.html";
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("results")
+
+        .select(
+            "subject, score, total_questions, created_at"
+        )
+
+        .eq("user_id", session.user.id)
+
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    const results =
+        document.getElementById("results");
+
+
+    if (error) {
+
+        results.innerHTML =
+            "<p class='empty'>Unable to load results.</p>";
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        results.innerHTML = `
+            <p class="empty">
+                You have no examination results yet.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    results.innerHTML = "";
+
+
+    data.forEach(function(result) {
+
+        const percentage =
+            Math.round(
+                (result.score /
+                result.total_questions) * 100
+            );
+
+
+        const date =
+            new Date(
+                result.created_at
+            ).toLocaleString();
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "result";
+
+
+        div.innerHTML = `
+
+            <div class="subject">
+                📚 ${result.subject}
+            </div>
+
+            <div class="score">
+                ${result.score} /
+                ${result.total_questions}
+                (${percentage}%)
+            </div>
+
+            <div class="date">
+                🕒 ${date}
+            </div>
+
+        `;
+
+
+        results.appendChild(div);
+
+    });
+
+}
+
+
+loadResults();
+
+</script>
+
+
+</body>
+
+</html>
