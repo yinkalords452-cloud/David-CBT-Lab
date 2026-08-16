@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Students - David CBT</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #071952;
+            color: white;
+            padding: 18px;
+        }
+
+        .header {
+            max-width: 1000px;
+            margin: auto;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            background: #088395;
+            padding: 9px 13px;
+            border-radius: 7px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 25px 15px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #071952;
+        }
+
+        .student {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 15px;
+        }
+
+        .name {
+            font-size: 19px;
+            font-weight: bold;
+            color: #071952;
+        }
+
+        .email {
+            margin-top: 8px;
+            color: #555;
+        }
+
+        .date {
+            margin-top: 8px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .empty,
+        .loading {
+            text-align: center;
+            color: #777;
+            padding: 25px;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="header">
+
+        <div class="brand">
+            👨‍💼 DAVID CBT ADMIN
+        </div>
+
+        <a
+            href="admin-dashboard.html"
+            class="back">
+
+            ← Dashboard
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <div class="box">
+
+        <h1>
+            👨‍🎓 Registered Students
+        </h1>
+
+        <div id="students">
+
+            <p class="loading">
+                Loading students...
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase-config.js"></script>
+
+
+<script>
+
+async function loadStudents() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        window.location.href =
+            "admin-login.html";
+
+        return;
+    }
+
+
+    const {
+        data: profile,
+        error: profileError
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("role")
+
+        .eq("id", session.user.id)
+
+        .single();
+
+
+    if (
+        profileError ||
+        !profile ||
+        profile.role !== "admin"
+    ) {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+            "admin-login.html";
+
+        return;
+    }
+
+
+    const {
+        data: students,
+        error
+    } = await supabaseClient
+
+        .from("profiles")
+
+        .select("id, username, role, created_at")
+
+        .eq("role", "student")
+
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    const container =
+        document.getElementById("students");
+
+
+    if (error) {
+
+        container.innerHTML = `
+            <p class="empty">
+                Unable to load students.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    if (!students ||
+        students.length === 0) {
+
+        container.innerHTML = `
+            <p class="empty">
+                No registered students yet.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    students.forEach(function(student) {
+
+        const date =
+            new Date(
+                student.created_at
+            ).toLocaleString();
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className =
+            "student";
+
+
+        div.innerHTML = `
+
+            <div class="name">
+                👨‍🎓 ${student.username || "Student"}
+            </div>
+
+            <div class="email">
+                Student ID:
+                ${student.id}
+            </div>
+
+            <div class="date">
+                Registered:
+                ${date}
+            </div>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+loadStudents();
+
+</script>
+
+
+</body>
+
+</html>
